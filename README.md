@@ -4,7 +4,7 @@
 
 `Player` is a simple iOS video player library written in [Swift](https://developer.apple.com/swift/).
 
-[![Build Status](https://travis-ci.org/piemonte/Player.svg?branch=master)](https://travis-ci.org/piemonte/Player) [![Pod Version](https://img.shields.io/cocoapods/v/Player.svg?style=flat)](http://cocoadocs.org/docsets/Player/)
+[![Build Status](https://travis-ci.org/piemonte/Player.svg?branch=master)](https://travis-ci.org/piemonte/Player) [![Pod Version](https://img.shields.io/cocoapods/v/Player.svg?style=flat)](http://cocoadocs.org/docsets/Player/) [![Swift Version](https://img.shields.io/badge/language-swift%203.0-brightgreen.svg)](https://developer.apple.com/swift) [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/piemonte/Player/blob/master/LICENSE)
 
 - Looking for an obj-c video player? Check out [PBJVideoPlayer (obj-c)](https://github.com/piemonte/PBJVideoPlayer).
 - Looking for a Swift camera library? Check out [Next Level](https://github.com/NextLevel/NextLevel).
@@ -24,15 +24,8 @@
 
 ```ruby
 # CocoaPods
+swift_version = "3.0"
 pod "Player", "~> 0.2.0"
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '3.0'
-    end
-  end
-end
 
 # Carthage
 github "piemonte/Player" ~> 0.2.0
@@ -63,7 +56,8 @@ Allocate and add the `Player` controller to your view hierarchy.
 
 ``` Swift
  self.player = Player()
- self.player.delegate = self
+ self.player.playerDelegate = self
+ self.player.playbackDelegate = self
  self.player.view.frame = self.view.bounds
     
  self.addChildViewController(self.player)
@@ -87,8 +81,12 @@ play/pause/chill
 Adjust the fill mode for the video, if needed.
 
 ``` Swift
- self.player.fillMode = “AVLayerVideoGravityResizeAspect”
+ self.player.fillMode = FillMode.resizeAspectFit
 ```
+
+## Documentation
+
+You can find [the docs here](http://piemonte.github.io/Player/). Documentation is generated with [jazzy](https://github.com/realm/jazzy) and hosted on [GitHub-Pages](https://pages.github.com).
 
 ## Community
 

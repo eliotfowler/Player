@@ -28,9 +28,9 @@ import UIKit
 
 let videoUrl = URL(string: "https://v.cdn.vine.co/r/videos/AA3C120C521177175800441692160_38f2cbd1ffb.1.5.13763579289575020226.mp4")!
 
-class ViewController: UIViewController, PlayerDelegate {
+class ViewController: UIViewController {
 
-    private var player: Player!
+    fileprivate var player: Player
     
     // MARK: object lifecycle
     
@@ -39,11 +39,19 @@ class ViewController: UIViewController, PlayerDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.player = Player()
         super.init(coder: aDecoder)
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.player = Player()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    deinit {
+        self.player.willMove(toParentViewController: self)
+        self.player.view.removeFromSuperview()
+        self.player.removeFromParentViewController()
     }
 
     // MARK: view lifecycle
@@ -51,17 +59,17 @@ class ViewController: UIViewController, PlayerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.autoresizingMask = ([UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight])
+        self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        self.player = Player()
-        self.player.delegate = self
+        self.player.playerDelegate = self
+        self.player.playbackDelegate = self
         self.player.view.frame = self.view.bounds
         
         self.addChildViewController(self.player)
         self.view.addSubview(self.player.view)
         self.player.didMove(toParentViewController: self)
         
-        self.player.setUrl(videoUrl)
+        self.player.url = videoUrl
         
         self.player.playbackLoops = true
         
@@ -75,8 +83,11 @@ class ViewController: UIViewController, PlayerDelegate {
         
         self.player.playFromBeginning()
     }
-    
-    // MARK: UIGestureRecognizer
+}
+
+// MARK: - UIGestureRecognizer
+
+extension ViewController {
     
     func handleTapGestureRecognizer(_ gestureRecognizer: UITapGestureRecognizer) {
         switch (self.player.playbackState.rawValue) {
@@ -92,29 +103,39 @@ class ViewController: UIViewController, PlayerDelegate {
                 self.player.pause()
         }
     }
+    
+}
 
-    // MARK: PlayerDelegate
+// MARK: - PlayerDelegate
+
+extension ViewController: PlayerDelegate {
     
     func playerReady(_ player: Player) {
     }
     
     func playerPlaybackStateDidChange(_ player: Player) {
     }
-
+    
     func playerBufferingStateDidChange(_ player: Player) {
     }
+    
+}
 
+// MARK: - PlayerPlaybackDelegate
+
+extension ViewController: PlayerPlaybackDelegate {
+    
+    func playerCurrentTimeDidChange(_ player: Player) {
+    }
+    
     func playerPlaybackWillStartFromBeginning(_ player: Player) {
     }
     
     func playerPlaybackDidEnd(_ player: Player) {
     }
     
-    func playerCurrentTimeDidChange(_ player: Player) {
+    func playerPlaybackWillLoop(_ player: Player) {
     }
-
-    func playerWillComeThroughLoop(_ player: Player) {
-        
-    }
+    
 }
 
